@@ -11,7 +11,6 @@
     "debug": "playwright test --debug",
     "result": "playwright show-report",
     "allure-result": "allure serve allure-results"
-    
   },
   "keywords": [],
   "author": "",
