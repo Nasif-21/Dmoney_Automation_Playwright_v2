@@ -10,3 +10,4 @@ node_modules/
 allure-results
 .env
 /resources/localstorage.json
+System-Pages
