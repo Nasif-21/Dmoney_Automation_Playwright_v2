@@ -5,6 +5,7 @@ import { Login } from '../pages/Login';
 import { setAuth } from '../utils/utils';
 import { Dashboard } from '../pages/Dashboard';
 import { AdminDashBoard } from '../pages/Admin-Pages/AdminDashBoard';
+import { CreateUser } from '../pages/Admin-Pages/CreateUser';
 
 test.describe.serial("Full Dmoney app automation",()=>{
 
@@ -40,7 +41,7 @@ test.describe.serial("Full Dmoney app automation",()=>{
         const dashBoardTitleString=await dashboard.getTitleText()
         await expect(dashBoardTitleString).toBe('Admin');
         await setAuth(page,"token");
-        await page.pause();   
+        //await page.pause();   
         
     })
 
@@ -51,8 +52,11 @@ test.describe.serial("Full Dmoney app automation",()=>{
          })
 
          const adminDashBoard=new AdminDashBoard(page)
+         const createUser=new CreateUser(page)
 
          adminDashBoard.goCreateUser()
+         //createUser.createNewAgentUser();
+         createUser.doLogout()
 
          
          await page.pause();
