@@ -15,11 +15,11 @@ export class CustomerDashBoard extends Dashboard //Inherits properties of Dashbo
     constructor(page: Page) {   
     super(page)             //Commom dashboard features can be used it from here like logout, profile etc
     
-    this.cashInLink=page.getByRole("link",{name:"Create User"})
-    this.sendMoneyLink=page.getByRole("link",{name:"Deposit (SYSTEM)"})
-    this.cashOutLink=page.getByRole("link",{name:"Transaction List"})
-    this.paymentLink=page.getByRole("link",{name:"User List"})
-    this.selfStatementLink=page.getByRole("link",{name:"User List"})
+    this.cashInLink=page.getByRole("link",{name:"Cash In (Bank)"})
+    this.sendMoneyLink=page.getByRole("link",{name:"Send Money"})
+    this.cashOutLink=page.getByRole("link",{name:"Cash Out"})
+    this.paymentLink=page.getByRole("link",{name:"Payment"})
+    this.selfStatementLink=page.getByRole("link",{name:"Self Statement"})
     
     }
 
