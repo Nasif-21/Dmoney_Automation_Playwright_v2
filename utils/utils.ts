@@ -1,9 +1,11 @@
 import { Page } from "@playwright/test";
 import fs from "fs"
 import path from "path";
+import { UserModel } from "../model/userModel";
 
 //Define the file directory of json with folder.
 const auth_file=path.resolve(__dirname,"../resources/localstorage.json")
+const user_file_path=path.resolve(__dirname,"../resources/userList.json")
 
 export function generateRandomNumber(min:number, max:number):number
 {
@@ -44,4 +46,26 @@ export async function setAuth(page:Page, storageKey="token"):Promise<string>
     fs.mkdirSync(path.dirname(auth_file),{recursive:true})
     fs.writeFileSync(auth_file,JSON.stringify({token},null,2))
     return token
+}
+
+export function saveJsonData(jsonObject:object):void
+{
+    if(!fs.existsSync(user_file_path))
+        throw new Error("No json file was found, create one inside resources folder")
+        //return undefined
+
+    const fileContent=fs.readFileSync(user_file_path,'utf-8')
+    const jsonArray:object[]=JSON.parse(fileContent)
+    jsonArray.push(jsonObject)
+    fs.writeFileSync(user_file_path,JSON.stringify(jsonArray),'utf-8')
+}
+
+export function readJsonData():UserModel
+{
+    if(!fs.readFileSync(user_file_path))
+        throw new Error("File not found, make a new json file inside resources folder")
+    
+    const fileContent=fs.readFileSync(user_file_path,'utf-8')
+    const jsonArray=JSON.parse(fileContent)
+    return jsonArray[jsonArray.length-1]
 }
