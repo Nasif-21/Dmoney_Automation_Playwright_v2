@@ -1,11 +1,12 @@
 import { test, expect, Page, BrowserContext } from '@playwright/test';
-import { Faker } from '@faker-js/faker';
+import { faker, Faker } from '@faker-js/faker';
 import { HomePage } from '../pages/HomePage';
 import { Login } from '../pages/Login';
-import { setAuth } from '../utils/utils';
+import { generateRandomNumber, saveJsonData, setAuth } from '../utils/utils';
 import { Dashboard } from '../pages/Dashboard';
 import { AdminDashBoard } from '../pages/Admin-Pages/AdminDashBoard';
 import { CreateUser } from '../pages/Admin-Pages/CreateUser';
+import { UserModel } from '../model/userModel';
 
 test.describe.serial("Full Dmoney app automation",()=>{
 
@@ -55,8 +56,19 @@ test.describe.serial("Full Dmoney app automation",()=>{
          const createUser=new CreateUser(page)
 
          adminDashBoard.goCreateUser()
-         //createUser.createNewAgentUser();
-         createUser.doLogout()
+         await page.waitForLoadState()
+         const userModel:UserModel={
+            Name:faker.person.fullName(),
+            Email:`skfamily0304+${generateRandomNumber(100,999)}@gmail.com`,
+            Password:"1234",
+            Phone_Number:`01${generateRandomNumber(100000000,999999999)}`,
+            NID:`${generateRandomNumber(1000000,9999999)}`,
+            
+         }
+         createUser.createNewAgentUser(userModel);
+         saveJsonData(userModel)
+         await page.waitForLoadState()
+         await expect(page).toHaveURL("https://dmoneyportal.roadtocareer.net/admin/users")
 
          
          await page.pause();
