@@ -70,15 +70,11 @@ export class UserList extends Dashboard{
     {
         const selectUser=await this.getCurrentUser()
         await selectUser.getByRole("button",{name:"VIEW"}).click()
-        await this.page.waitForLoadState()
-        this.editbtn.click();
-        await this.page.waitForLoadState()
+        await this.editbtn.click();
         await this.statusCombo.click()
-        await this.page.waitForLoadState()
+        await expect(this.statusOptAct).toBeVisible()
         await this.statusOptAct.click()
-        await this.page.waitForLoadState()
         await this.btnSave.click()
-        await this.page.waitForLoadState()
         await this.backbtn.click()
 
     }
