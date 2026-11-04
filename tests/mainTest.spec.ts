@@ -6,6 +6,7 @@ import { generateRandomNumber, saveJsonData, setAuth } from '../utils/utils';
 import { Dashboard } from '../pages/Dashboard';
 import { AdminDashBoard } from '../pages/Admin-Pages/AdminDashBoard';
 import { CreateUser } from '../pages/Admin-Pages/CreateUser';
+import { UserList } from '../pages/Admin-Pages/UserList';
 import { UserModel } from '../model/userModel';
 
 test.describe.serial("Full Dmoney app automation",()=>{
@@ -46,17 +47,18 @@ test.describe.serial("Full Dmoney app automation",()=>{
         
     })
 
-     test('Creating Agent successfully ',{tag:[`@smoke`,`@regression`]},async({})=>{
+     test('Creating Agent successfully and status check ',{tag:[`@smoke`,`@regression`]},async({})=>{
         test.info().annotations.push({
              type:'Note',
-             description:'Creating an agent from admin account',
+             description:'Creating an agent from admin account and check status',
          })
 
          const adminDashBoard=new AdminDashBoard(page)
          const createUser=new CreateUser(page)
+         
 
-         adminDashBoard.goCreateUser()
-         await page.waitForLoadState()
+        adminDashBoard.goCreateUser() 
+        await page.waitForLoadState()
          const userModel:UserModel={
             Name:faker.person.fullName(),
             Email:`skfamily0304+${generateRandomNumber(100,999)}@gmail.com`,
@@ -65,18 +67,37 @@ test.describe.serial("Full Dmoney app automation",()=>{
             NID:`${generateRandomNumber(1000000,9999999)}`,
             
          }
+        
          createUser.createNewAgentUser(userModel);
          saveJsonData(userModel)
          await page.waitForLoadState()
          await expect(page).toHaveURL("https://dmoneyportal.roadtocareer.net/admin/users")
-
+        
+        const userList=new UserList(page)
+        await page.waitForLoadState()
+        userList.checkUserCreateStatus()
          
-         await page.pause();
+         
+         //await page.pause();
 
         
         
         
      })
+
+      test('Check user status active',{tag:[`@smoke`,`@regression`]},async({})=>{
+        test.info().annotations.push({
+            type:'Note',
+            description:'Update user status to active',
+        })
+        const userList=new UserList(page)
+        userList.activeUserStatus()
+        await page.waitForLoadState()
+        userList.checkUserActiveStatus()
+        await page.pause()
+        
+        
+    })
 
 })
 
