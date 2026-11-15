@@ -8,6 +8,8 @@ import { AdminDashBoard } from '../pages/Admin-Pages/AdminDashBoard';
 import { CreateUser } from '../pages/Admin-Pages/CreateUser';
 import { UserList } from '../pages/Admin-Pages/UserList';
 import { UserModel } from '../model/userModel';
+import { AgentDashBoard } from '../pages/Agent-Pages/AgentDashBoard';
+import { CashIn } from '../pages/Agent-Pages/CashIn';
 
 test.describe.serial("Full Dmoney app automation",()=>{
 
@@ -75,7 +77,8 @@ test.describe.serial("Full Dmoney app automation",()=>{
         
         const userList=new UserList(page)
         await page.waitForLoadState()
-        userList.checkUserCreateStatus()
+        await userList.checkUserCreateStatus()
+        await page.waitForLoadState()
          
          
          //await page.pause();
@@ -91,17 +94,40 @@ test.describe.serial("Full Dmoney app automation",()=>{
             description:'Update user status to active',
         })
         const userList=new UserList(page)
-        userList.activeUserStatus()
-        await page.waitForLoadState()
-        userList.checkUserActiveStatus()
+        //await page.waitForTimeout(3000)
+        await userList.activeUserStatus()
+        //await page.waitForTimeout(3000)
+        await userList.checkUserActiveStatus()
+        //await page.waitForTimeout(3000)
+        await userList.doLogout()
         await page.pause()
         
         
     })
 
+    test('System login and deposit money to current agent',{tag:[`@smoke`,`@regression`]},async({})=>{
+        test.info().annotations.push({
+            type:'Note',
+            description:'Log in using system credencials and deposit to the recent agent',
+        })
+
+        const login=new Login(page);
+        await login.doSysetmLogin();
+        await setAuth(page,"token")
+
+        const systemDashboard=new AgentDashBoard(page)
+        await systemDashboard.goCashIn()
+
+        const cashIn=new CashIn(page)
+        await cashIn.doDeposit()
+
+        await page.pause()
+           
+    })
+
 })
 
-  /*  test('Go to homepage and do login',async({})=>{
+  /*  test('Go to homepage and do login',{tag:[`@smoke`,`@regression`]},async({})=>{
         test.info().annotations.push({
             type:'Note',
             description:'Visit website and test the login page redirection',
