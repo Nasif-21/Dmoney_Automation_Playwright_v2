@@ -87,11 +87,6 @@ export class UserList extends Dashboard{
 
     await this.backbtn.click()
 
-        // await this.page.waitForTimeout(3000)
-        // await this.btnSave.click()
-        // await this.page.waitForTimeout(3000)
-        // await this.backbtn.click()
-
     }
 
        async checkUserActiveStatus()
