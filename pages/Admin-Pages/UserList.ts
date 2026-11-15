@@ -69,20 +69,40 @@ export class UserList extends Dashboard{
     async activeUserStatus()
     {
         const selectUser=await this.getCurrentUser()
+        
         await selectUser.getByRole("button",{name:"VIEW"}).click()
+        
         await this.editbtn.click();
+        
         await this.statusCombo.click()
         await expect(this.statusOptAct).toBeVisible()
         await this.statusOptAct.click()
-        await this.btnSave.click()
-        await this.backbtn.click()
+         const [response] = await Promise.all([
+        this.page.waitForResponse(
+            res => res.request().method() !== 'GET' && res.status() < 400,
+            { timeout: 15000 }
+        ),
+        this.btnSave.click()
+    ])
+
+    await this.backbtn.click()
+
+        // await this.page.waitForTimeout(3000)
+        // await this.btnSave.click()
+        // await this.page.waitForTimeout(3000)
+        // await this.backbtn.click()
 
     }
 
        async checkUserActiveStatus()
     {  
-        const status=await this.getCurrentUser()
-        await expect(status).toContainText("ACTIVE")
+        const row = await this.getCurrentUser()
+    // Give the list time to refresh, and reload if it's still stale
+    await expect(async () => {
+        await this.page.reload()
+        const r = await this.getCurrentUser()
+        await expect(r).toContainText("ACTIVE", { timeout: 2000 })
+    }).toPass({ timeout: 20000 })
 
     }
     
