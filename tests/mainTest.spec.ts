@@ -2,7 +2,7 @@ import { test, expect, Page, BrowserContext } from '@playwright/test';
 import { faker, Faker } from '@faker-js/faker';
 import { HomePage } from '../pages/HomePage';
 import { Login } from '../pages/Login';
-import { generateRandomNumber, saveJsonData, setAuth } from '../utils/utils';
+import { generateRandomNumber, injectAuth, saveJsonData, setAuth } from '../utils/utils';
 import { Dashboard } from '../pages/Dashboard';
 import { AdminDashBoard } from '../pages/Admin-Pages/AdminDashBoard';
 import { CreateUser } from '../pages/Admin-Pages/CreateUser';
@@ -88,19 +88,19 @@ test.describe.serial("Full Dmoney app automation",()=>{
         
      })
 
-      test('Check user status active',{tag:[`@smoke`,`@regression`]},async({})=>{
+    test('Check user status active',{tag:[`@smoke`,`@regression`]},async({})=>{
         test.info().annotations.push({
             type:'Note',
             description:'Update user status to active',
         })
         const userList=new UserList(page)
-        //await page.waitForTimeout(3000)
+        
         await userList.activeUserStatus()
-        //await page.waitForTimeout(3000)
+        
         await userList.checkUserActiveStatus()
-        //await page.waitForTimeout(3000)
+        
         await userList.doLogout()
-        await page.pause()
+        //await page.pause()
         
         
     })
@@ -121,8 +121,20 @@ test.describe.serial("Full Dmoney app automation",()=>{
         const cashIn=new CashIn(page)
         await cashIn.doDeposit()
 
-        await page.pause()
+       // await page.pause()
            
+    })
+
+    test.fixme('Log in to agent user account and check balance',{tag:[`@smoke`,`@regression`]},async({})=>{
+        test.info().annotations.push({
+            type:'Note',
+            description:'Log in as agent account and check its balance ',
+        })
+        
+
+        
+        
+        
     })
 
 })

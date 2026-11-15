@@ -17,7 +17,7 @@ export function generateRandomNumber(min:number, max:number):number
 
 
 //Getting token from the localstorage and push inside browser
-export  function getAuth(): string |undefined
+function getAuth(): string |undefined
 {
     if(!fs.existsSync(auth_file))
     return undefined
@@ -26,6 +26,21 @@ export  function getAuth(): string |undefined
     return data.token
 }
 
+export async function injectAuth(page:Page,storageKey="token"): Promise<void>
+{
+    const token=getAuth()
+    if(!token)
+    {
+        throw new Error(`No Auth Token was found or token was expire in ${auth_file}. Run login first`)
+    }
+
+    await page.addInitScript(
+        ({key,value})=>{
+            window.localStorage.setItem(key,value)
+        },
+        {key:storageKey,value:token}
+    )
+}
 
 // In this function, after login, we will hunt down token inside browser Local Storage
 // Then write down token into our json file. 
